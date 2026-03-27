@@ -145,42 +145,6 @@ history = model.fit(
 )
 
 
-# FINAL EVALUATION
-print("\n" + "="*60)
-print("FINAL EVALUATION")
-print("="*60)
-
-loss, acc = model.evaluate(test_generator)
-print(f"\n Final Test Accuracy: {acc*100:.2f}%")
-print(f" Final Test Loss: {loss:.4f}")
-
-
-# DETAILED PREDICTIONS
-print("\n Generating predictions...")
-predictions = model.predict(test_generator)
-predicted_classes = np.argmax(predictions, axis=1)
-true_classes = test_generator.classes
-
-class_name_list = [class_names[i] for i in sorted(class_names.keys())]
-
-print("\n Classification Report:")
-print("="*60)
-print(classification_report(true_classes, predicted_classes, target_names=class_name_list))
-
-print("\n Confusion Matrix:")
-print("="*60)
-cm = confusion_matrix(true_classes, predicted_classes)
-print(cm)
-print(f"\nRows = True labels, Columns = Predicted labels")
-print(f"Order: {class_name_list}")
-
-print("\n Per-Class Performance:")
-print("="*60)
-for i, class_name in enumerate(class_name_list):
-    class_total = np.sum(true_classes == i)
-    class_correct = cm[i][i]
-    class_acc = (class_correct / class_total * 100) if class_total > 0 else 0
-    print(f"{class_name:20s}: {class_correct}/{class_total} correct ({class_acc:.1f}%)")
 
 
 # SAVE FINAL MODEL
@@ -200,15 +164,3 @@ with open("water_quality_cnn_model.tflite", "wb") as f:
     f.write(tflite_model)
     
 print("TFLite model created: water_quality_cnn_model.tflite")
-
-print("\n" + "="*60)
-print(" TRAINING COMPLETED!")
-print("="*60)
-print(f"Final Accuracy: {acc*100:.2f}%")
-print("Model ready for Android deployment!")
-print("\n Performance Summary:")
-print("   - Safe water detection: ~90%")
-print("   - Moderate contamination: ~80%")
-print("   - High contamination: ~68-70%")
-print("   - Overall: ~80%")
-print("\n This model is ready for your FYP!")
